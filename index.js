@@ -107,10 +107,13 @@ app.delete("/movies/:id",auth,async(request,response)=>{
     const id=request.params;
     const {roleId}=request;
     // console.log(roleId)
-    if(roleId==ROLE_ID.ADMIN){
-    const movies=await client.db("hacathon").collection("movies").deleteOne({_id:ObjectId(id)});
+    // console.log(id)
+    if(roleId==ROLE_ID.ADMIN &&request.params){
+      request.params=+request.params;
+    const movies=await client.db("hacathon").collection("movies").deleteOne({_id:new ObjectId(id)});
     movies.deletedCount> 0 ?response.send({message:"Mobile deleted sucessfully"}):response.send({message:"Mobile not found"});
-    } 
+    console.log(id) 
+  } 
     else{
        
       response.status(401).send({message:`Unauthorized`})
